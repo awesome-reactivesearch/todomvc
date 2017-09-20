@@ -199,9 +199,9 @@ class TodoApp extends Component {
           <ul className="todo-list">
             <ResultList
               componentId="ResultList01"
-              stream={true}
+              stream={false}
               react={{
-                or: ["Filters"]
+                or: ["Filters", "EditSensor"]
               }}
               scrollOnTarget={window}
               onData={this.onData}

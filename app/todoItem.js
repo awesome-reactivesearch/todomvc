@@ -78,11 +78,11 @@ class TodoItem extends Component {
    * and https://facebook.github.io/react/docs/component-specs.html#updating-componentdidupdate
    */
   componentDidUpdate (prevProps) {
-    if (!prevProps.editing && this.props.editing) {
-      let node = ReactDOM.findDOMNode(this.refs.editField);
-      node.focus();
-      node.setSelectionRange(node.value.length, node.value.length)
-    }
+    // if (!prevProps.editing && this.props.editing) {
+    //   let node = ReactDOM.findDOMNode(this.refs.editField);
+    //   node.focus();
+    //   node.setSelectionRange(node.value.length, node.value.length)
+    // }
   }
 
   render () {
@@ -115,7 +115,7 @@ class TodoItem extends Component {
           componentId="EditSensor"
           dataField="name"
           className="edit-todo-container"
-          defaultSelected={this.state.edit}
+          defaultSelected={this.state.editText}
           onBlur={this.handleSubmit.bind(this)}
           onKeyDown={this.handleKeyDown.bind(this)}
           onValueChange={this.handleChange.bind(this)}
