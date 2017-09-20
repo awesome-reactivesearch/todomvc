@@ -113,10 +113,10 @@ class TodoApp extends Component {
           todo={{...todo}}
           onToggle={this.toggle.bind(this, todo)}
           onDestroy={this.destroy.bind(this, todo)}
-          onEdit={this.edit.bind(this, todo)}
-          editing={this.state.editing === todo.id}
+          // onEdit={this.edit.bind(this, todo)}
+          // editing={this.state.editing === todo.id}
           onSave={this.save.bind(this, todo)}
-          onCancel={this.cancel.bind(this)}
+          // onCancel={this.cancel.bind(this)}
         />
       ),
 		};
@@ -201,7 +201,7 @@ class TodoApp extends Component {
               componentId="ResultList01"
               stream={false}
               react={{
-                or: ["Filters", "EditSensor"]
+                or: ["Filters"]
               }}
               scrollOnTarget={window}
               onData={this.onData}

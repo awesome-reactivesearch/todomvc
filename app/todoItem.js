@@ -14,36 +14,48 @@ class TodoItem extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      editText: ''
+      editText: '',
+      editing: false
     }
   }
 
   handleSubmit (event) {
     let val = this.state.editText.trim();
     if (val) {
+      console.log('handleSubmit called');
       this.props.onSave(val);
-      this.setState({editText: val})
+      this.setState({
+        editText: val,
+        editing: false
+      })
     } else {
       this.props.onDestroy()
     }
   }
 
   handleEdit () {
-    this.props.onEdit(this.props.todo);
-    this.setState({editText: this.props.todo.title})
+    // this.props.onEdit(this.props.todo);
+    this.setState({
+      editText: this.props.todo.title,
+      editing: true
+    })
   }
 
   handleKeyDown (event) {
     if (event.which === ESCAPE_KEY) {
-      this.setState({editText: this.props.todo.title});
-      this.props.onCancel(event)
+      this.setState({
+        editText: this.props.todo.title,
+        editing: false
+      })
+      console.log('ESCAPE_KEY pressed');
+      // this.props.onCancel(event)
     } else if (event.which === ENTER_KEY) {
       this.handleSubmit(event)
     }
   }
 
   handleChange (value) {
-    if (this.props.editing) {
+    if (this.state.editing) {
       this.setState({editText: value})
     }
   }
@@ -63,13 +75,13 @@ class TodoItem extends Component {
    * just use it as an example of how little code it takes to get an order
    * of magnitude performance improvement.
    */
-  shouldComponentUpdate (nextProps, nextState) {
-    return (
-      nextProps.todo !== this.props.todo ||
-      nextProps.editing !== this.props.editing ||
-      nextState.editText !== this.state.editText
-    )
-  }
+  // shouldComponentUpdate (nextProps, nextState) {
+  //   return (
+  //     nextProps.todo !== this.props.todo ||
+  //     nextProps.editing !== this.props.editing ||
+  //     nextState.editText !== this.state.editText
+  //   )
+  // }
 
   /**
    * Safely manipulate the DOM after updating the state when invoking
@@ -89,16 +101,16 @@ class TodoItem extends Component {
     return (
       <li className={classNames({
         completed: this.props.todo.completed,
-        editing: this.props.editing
+        editing: this.state.editing
       })}>
-        <div className="view" onDoubleClick={this.handleEdit.bind(this)}>
+        <div className="view">
           <input
             className="toggle"
             type="checkbox"
             checked={this.props.todo.completed}
             onChange={this.props.onToggle}
           />
-          <label>
+          <label onDoubleClick={this.handleEdit.bind(this)}>
             {this.props.todo.title}
           </label>
           <button className="destroy" onClick={this.props.onDestroy} />
