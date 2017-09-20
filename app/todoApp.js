@@ -80,16 +80,17 @@ class TodoApp extends Component {
   }
 
   edit (todo) {
-    this.setState({editing: todo.id})
+    // this.setState({editing: todo.id})
   }
 
   save (todoToSave, text) {
+    console.log('saving', text, todoToSave);
     this.props.model.save(todoToSave, text);
-    this.setState({editing: null})
+    // this.setState({editing: null})
   }
 
   cancel () {
-    this.setState({editing: null})
+    // this.setState({editing: null})
   }
 
   clearCompleted () {

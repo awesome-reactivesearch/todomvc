@@ -22,7 +22,7 @@ class TodoItem extends Component {
   handleSubmit (event) {
     let val = this.state.editText.trim();
     if (val) {
-      console.log('handleSubmit called');
+      console.log('item saving', val);
       this.props.onSave(val);
       this.setState({
         editText: val,
@@ -56,16 +56,12 @@ class TodoItem extends Component {
 
   handleChange (value) {
     if (this.state.editing) {
-      this.setState({editText: value})
+      this.setState({ editText: value })
     }
   }
 
   getInitialState () {
     return {editText: this.props.todo.title}
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps: ', nextProps);
   }
 
   /**
