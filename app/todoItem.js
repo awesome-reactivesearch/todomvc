@@ -20,9 +20,9 @@ class TodoItem extends Component {
   }
 
   handleSubmit (event) {
+    console.log('handleSubmit', event);
     let val = this.state.editText.trim();
     if (val) {
-      console.log('item saving', val);
       this.props.onSave(val);
       this.setState({
         editText: val,
@@ -31,6 +31,14 @@ class TodoItem extends Component {
     } else {
       this.props.onDestroy()
     }
+  }
+
+  onBlur () {
+    console.log('onBlur');
+    this.setState({
+      editText: '',
+      editing: false
+    })
   }
 
   handleEdit () {
@@ -47,7 +55,6 @@ class TodoItem extends Component {
         editText: this.props.todo.title,
         editing: false
       })
-      console.log('ESCAPE_KEY pressed');
       // this.props.onCancel(event)
     } else if (event.which === ENTER_KEY) {
       this.handleSubmit(event)
@@ -111,14 +118,6 @@ class TodoItem extends Component {
           </label>
           <button className="destroy" onClick={this.props.onDestroy} />
         </div>
-        {/* <input
-          ref="editField"
-          className="edit"
-          value={this.state.editText}
-          onBlur={this.handleSubmit.bind(this)}
-          onChange={this.handleChange.bind(this)}
-          onKeyDown={this.handleKeyDown.bind(this)}
-        /> */}
         <TextField
           componentId="EditSensor"
           dataField="name"
