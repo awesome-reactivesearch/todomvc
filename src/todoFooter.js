@@ -9,6 +9,7 @@ import {
 } from '@appbaseio/reactivesearch';
 
 import Utils from './utils';
+import './todomvc.css';
 
 const ALL_TODOS = 'all';
 const ACTIVE_TODOS = 'active';

@@ -3,8 +3,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-
 import { TextField } from '@appbaseio/reactivesearch';
+
+import './todomvc.css';
 
 const ESCAPE_KEY = 27;
 const ENTER_KEY = 13;

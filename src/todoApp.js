@@ -11,8 +11,7 @@ import {
 import Utils from './utils';
 import TodoItem from './todoItem';
 import TodoFooter from './todoFooter';
-
-import './todomvc.scss';
+import './todomvc.css';
 
 const ESCAPE_KEY = 27;
 const ENTER_KEY = 13;
