@@ -20,6 +20,8 @@ const ALL_TODOS = "all";
 const ACTIVE_TODOS = "active";
 const COMPLETED_TODOS = "completed";
 
+export let routerInstance;
+
 class TodoApp extends Component {
   constructor (props) {
     super(props);
@@ -34,13 +36,13 @@ class TodoApp extends Component {
   }
 
   componentDidMount () {
-    let setState = this.setState;
-    let router = Router({
+    let { setState } = this;
+    routerInstance = Router({
       "/": setState.bind(this, {nowShowing: ALL_TODOS}),
       "/active": setState.bind(this, {nowShowing: ACTIVE_TODOS}),
       "/completed": setState.bind(this, {nowShowing: COMPLETED_TODOS})
     });
-    router.init("/")
+    routerInstance.init("/")
   }
 
   handleChange (newTodo) {
@@ -138,46 +140,45 @@ class TodoApp extends Component {
       <ReactiveBase
         app="todomvc"
         credentials="kDoV3s5Xk:4994cac6-00a3-4179-b159-b0adbfdde34b"
-        type="todo_reactjs"
-        >
-          <header className="header">
-            <h1>todos</h1>
-            <TextField
-              componentId="NewTodoSensor"
-              dataField="title"
-              className="new-todo-container"
-              placeholder="What needs to be done?"
-              onKeyDown={this.handleNewTodoKeyDown.bind(this)}
-              onValueChange={this.handleChange.bind(this)}
-              defaultSelected={this.state.newTodo}
-              autoFocus={true}
-            />
-          </header>
+        type="todo_reactjs">
+        <header className="header">
+          <h1>todos</h1>
+          <TextField
+            componentId="NewTodoSensor"
+            dataField="title"
+            className="new-todo-container"
+            placeholder="What needs to be done?"
+            onKeyDown={this.handleNewTodoKeyDown.bind(this)}
+            onValueChange={this.handleChange.bind(this)}
+            defaultSelected={this.state.newTodo}
+            autoFocus={true}
+          />
+        </header>
 
-          <section className="main">
-            <input
-              className="toggle-all"
-              type="checkbox"
-              onChange={this.toggleAll.bind(this)}
-              checked={activeTodoCount === 0}
+        <section className="main">
+          <input
+            className="toggle-all"
+            type="checkbox"
+            onChange={this.toggleAll.bind(this)}
+            checked={activeTodoCount === 0}
+          />
+          <ul className="todo-list">
+            <ReactiveList
+              stream={true}
+              react={{
+                or: ["FiltersSensor"]
+              }}
+              scrollOnTarget={window}
+              showResultStats={false}
+              pagination={false}
+              onAllData={this.onAllData}
             />
-            <ul className="todo-list">
-              <ReactiveList
-                stream={true}
-                react={{
-                  or: ["FiltersSensor"]
-                }}
-                scrollOnTarget={window}
-                showResultStats={false}
-                pagination={false}
-                onAllData={this.onAllData}
-              />
-            </ul>
-          </section>
-          {footer}
-        </ReactiveBase>
-      )
-    }
+          </ul>
+        </section>
+        {footer}
+      </ReactiveBase>
+    )
   }
+}
 
-  export default TodoApp;
+export default TodoApp;

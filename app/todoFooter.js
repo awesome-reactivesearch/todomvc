@@ -9,6 +9,7 @@ import {
 } from "@appbaseio/reactivesearch";
 
 import Utils from "./utils";
+import { routerInstance } from './todoApp';
 
 const ALL_TODOS = "all";
 const ACTIVE_TODOS = "active";
@@ -80,7 +81,7 @@ class TodoFooter extends Component {
             multiSelect={false}
             onValueChange={
               function(val) {
-                console.log("@onValueChange: ", val);
+                routerInstance.setRoute("/" + val[0].value)
               }
             }
             customQuery={
