@@ -78,6 +78,11 @@ class TodoFooter extends Component {
             dataField="completed"
             defaultSelected={[nowShowing]}
             multiSelect={false}
+            onValueChange={
+              function(val) {
+                console.log("@onValueChange: ", val);
+              }
+            }
             customQuery={
               function(data) {
                 let val;
@@ -86,27 +91,29 @@ class TodoFooter extends Component {
                 }
                 const completed = (val === "completed") ? true : (val === "active") ? false : "all";
 
-                if (completed === "all") {
+                console.log("@customQuery: completed:", completed, "data:", data);
+
+                // if (completed === "all") {
                   return {
                     query: {
                       match_all: {}
                     }
                   }
-                }
+                // }
 
-                return {
-                  "query": {
-                    "bool": {
-                      "must": [
-                        {
-                          "match": {
-                            "completed": completed
-                          }
-                        }
-                      ]
-                    }
-                  }
-                }
+                // return {
+                //   "query": {
+                //     "bool": {
+                //       "must": [
+                //         {
+                //           "match": {
+                //             "completed": completed
+                //           }
+                //         }
+                //       ]
+                //     }
+                //   }
+                // }
               }
             }
             data={

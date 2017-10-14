@@ -98,6 +98,8 @@ class TodoApp extends Component {
       return a._source.createdAt - b._source.createdAt;
     });
 
+    console.log("todosData", todosData)
+
     return todosData.map(({ _source: todo }) => {
       return (
         <TodoItem
