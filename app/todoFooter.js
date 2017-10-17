@@ -36,18 +36,18 @@ class TodoFooter extends Component {
 
   render () {
     let clearButton = null;
+    let { completedCount, onClearCompleted, nowShowing } = this.props;
 
-    if (this.props.completedCount > 0) {
+    if (completedCount > 0) {
       clearButton = (
         <button
           className="clear-completed"
-          onClick={this.props.onClearCompleted}>
+          onClick={onClearCompleted}>
           Clear completed
         </button>
       )
     }
 
-    let nowShowing = this.props.nowShowing;
     return (
       <footer className="footer">
         <DataController

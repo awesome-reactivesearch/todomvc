@@ -39,6 +39,7 @@ class TodoApp extends Component {
     let { setState } = this;
     routerInstance = Router({
       "/": setState.bind(this, {nowShowing: ALL_TODOS}),
+      "/all": setState.bind(this, {nowShowing: ALL_TODOS}),
       "/active": setState.bind(this, {nowShowing: ACTIVE_TODOS}),
       "/completed": setState.bind(this, {nowShowing: COMPLETED_TODOS})
     });
@@ -120,18 +121,19 @@ class TodoApp extends Component {
     main,
     todos = this.props.model.todos;
 
+    let { nowShowing, newTodo } = this.state;
+
     let activeTodoCount = todos.reduce((accum, todo) => {
       return todo.completed ? accum : accum + 1
     }, 0);
 
     let completedCount = todos.length - activeTodoCount;
-
     if (activeTodoCount || completedCount) {
       footer =
       <TodoFooter
         count={activeTodoCount}
         completedCount={completedCount}
-        nowShowing={this.state.nowShowing}
+        nowShowing={nowShowing}
         onClearCompleted={this.clearCompleted.bind(this)}
       />
     }
@@ -150,7 +152,7 @@ class TodoApp extends Component {
             placeholder="What needs to be done?"
             onKeyDown={this.handleNewTodoKeyDown.bind(this)}
             onValueChange={this.handleChange.bind(this)}
-            defaultSelected={this.state.newTodo}
+            defaultSelected={newTodo}
             autoFocus={true}
           />
         </header>
