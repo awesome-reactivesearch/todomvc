@@ -9,7 +9,6 @@ import {
 } from "@appbaseio/reactivesearch";
 
 import Utils from "./utils";
-import { routerInstance } from './todoApp';
 
 const ALL_TODOS = "all";
 const ACTIVE_TODOS = "active";
@@ -79,42 +78,14 @@ class TodoFooter extends Component {
             dataField="completed"
             defaultSelected={[nowShowing]}
             multiSelect={false}
-            onValueChange={
-              function(val) {
-                routerInstance.setRoute("/" + val[0].value)
-              }
-            }
+            onValueChange={this.props.handleToggle}
             customQuery={
-              function(data) {
-                let val;
-                if (Array.isArray(data)) {
-                  val = data[0].value;
-                }
-                const completed = (val === "completed") ? true : (val === "active") ? false : "all";
-
-                console.log("@customQuery: completed:", completed, "data:", data);
-
-                // if (completed === "all") {
-                  return {
-                    query: {
-                      match_all: {}
-                    }
+              function() {
+                return {
+                  query: {
+                    match_all: {}
                   }
-                // }
-
-                // return {
-                //   "query": {
-                //     "bool": {
-                //       "must": [
-                //         {
-                //           "match": {
-                //             "completed": completed
-                //           }
-                //         }
-                //       ]
-                //     }
-                //   }
-                // }
+                }
               }
             }
             data={

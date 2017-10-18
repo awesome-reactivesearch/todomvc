@@ -20,7 +20,7 @@ const ALL_TODOS = "all";
 const ACTIVE_TODOS = "active";
 const COMPLETED_TODOS = "completed";
 
-export let routerInstance;
+let routerInstance;
 
 class TodoApp extends Component {
   constructor (props) {
@@ -33,6 +33,7 @@ class TodoApp extends Component {
     this.onAllData = this.onAllData.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.clearCompleted = this.clearCompleted.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
   }
 
   componentDidMount () {
@@ -44,6 +45,10 @@ class TodoApp extends Component {
       "/completed": setState.bind(this, {nowShowing: COMPLETED_TODOS})
     });
     routerInstance.init("/")
+  }
+
+  handleToggle (e) {
+    routerInstance.setRoute("/" + e[0].value)
   }
 
   handleChange (newTodo) {
@@ -94,7 +99,11 @@ class TodoApp extends Component {
   onAllData(data) {
 
     // merging all streaming and historic data
-    var todosData = Utils.mergeTodos(data);
+    let todosData = Utils.mergeTodos(data);
+
+    if (this.state.nowShowing !== ALL_TODOS) {
+      todosData = todosData.filter(({ _source: todo }) => todo.completed === (this.state.nowShowing === COMPLETED_TODOS));
+    }
 
     // sorting todos based on creation time
     todosData = todosData.sort(function(a, b) {
@@ -135,6 +144,7 @@ class TodoApp extends Component {
         completedCount={completedCount}
         nowShowing={nowShowing}
         onClearCompleted={this.clearCompleted.bind(this)}
+        handleToggle={this.handleToggle}
       />
     }
 
@@ -164,11 +174,11 @@ class TodoApp extends Component {
             onChange={this.toggleAll.bind(this)}
             checked={activeTodoCount === 0}
           />
-          <ul className="todo-list">
+          <ul className="todo-list" key={nowShowing}>
             <ReactiveList
               stream={true}
               react={{
-                or: ["FiltersSensor"]
+                or: ["FiltersSensor", nowShowing]
               }}
               scrollOnTarget={window}
               showResultStats={false}
