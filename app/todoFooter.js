@@ -10,10 +10,6 @@ import {
 
 import Utils from "./utils";
 
-const ALL_TODOS = "all";
-const ACTIVE_TODOS = "active";
-const COMPLETED_TODOS = "completed";
-
 class TodoFooter extends Component {
 
   onAllData (data) {

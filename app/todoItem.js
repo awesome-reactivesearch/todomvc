@@ -78,7 +78,7 @@ class TodoItem extends Component {
     if (!prevState.editing && this.state.editing) {
       this.setState({ autoFocus: true });
 
-      // workaround because after setState re-rendering is not happening 
+      // workaround because after setState re-rendering is not happening
       let node = ReactDOM.findDOMNode(this.refs.editField);
       node = node.childNodes[0].children[0];
       node.focus();
@@ -116,9 +116,9 @@ class TodoItem extends Component {
           onKeyDown={this.handleKeyDown.bind(this)}
           onValueChange={this.handleChange.bind(this)}
         />
-    </li>
-  )
-}
+      </li>
+    )
+  }
 }
 
 export default TodoItem;
