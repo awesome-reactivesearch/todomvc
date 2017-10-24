@@ -6,9 +6,15 @@ class TodoButton extends Component {
   }
 
   render() {
+    let cx = classNames(
+      "btn rbc-btn", {
+        "rbc-btn-active": this.props.active,
+        "rbc-btn-inactive": !this.props.active,
+      }
+    );
     return (
       <button
-        className={`btn rbc-btn ${this.props.active ? "rbc-btn-active" : "rbc-btn-inactive"}`}
+        className={cx}
         onClick={this.handleClick.bind(this)}>
         {this.props.label}
       </button>
