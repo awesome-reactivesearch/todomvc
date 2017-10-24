@@ -3,12 +3,16 @@
 import React, { Component } from "react";
 import classNames from "classnames";
 import {
-  ToggleButton,
   ReactiveElement,
   DataController
 } from "@appbaseio/reactivesearch";
 
+import TodoButton from "./todoButton";
 import Utils from "./utils";
+
+const ALL_TODOS = "all";
+const ACTIVE_TODOS = "active";
+const COMPLETED_TODOS = "completed";
 
 class TodoFooter extends Component {
 
@@ -52,9 +56,7 @@ class TodoFooter extends Component {
           customQuery={
             function(value) {
               return {
-                query: {
-                  match_all: {}
-                }
+                match_all: {}
               }
             }
           }
@@ -69,29 +71,26 @@ class TodoFooter extends Component {
           }}
         />
         <ul className="filters">
-          <ToggleButton
-            componentId="FiltersSensor"
-            dataField="completed"
-            defaultSelected={[nowShowing]}
-            multiSelect={false}
-            onValueChange={this.props.handleToggle}
-            customQuery={
-              function() {
-                return {
-                  query: {
-                    match_all: {}
-                  }
-                }
-              }
-            }
-            data={
-              [
-                {"label": "all",        "value": "all"},
-                {"label": "active",     "value": "active"},
-                {"label": "completed",  "value": "completed"}
-              ]
-            }
-          />
+          <div className="rbc-buttongroup">
+            <TodoButton
+              label="All"
+              value="all"
+              active={this.props.nowShowing === ALL_TODOS}
+              onClick={this.props.handleToggle}
+            />
+            <TodoButton
+              label="Active"
+              value="active" 
+              active={this.props.nowShowing === ACTIVE_TODOS}
+              onClick={this.props.handleToggle}
+            />
+            <TodoButton
+              label="Completed"
+              value="completed"
+              active={this.props.nowShowing === COMPLETED_TODOS}
+              onClick={this.props.handleToggle}
+            />
+          </div>
         </ul>
         {clearButton}
       </footer>
