@@ -94,13 +94,24 @@ class TodoApp extends Component {
   }
 
   render () {
-    let todos = this.props.model.todos;
+    let todos = this.props.model.todos, toggleAllSection;
 
     let { nowShowing, newTodo } = this.state;
 
     let activeTodoCount = todos.reduce((accum, todo) => {
       return todo.completed ? accum : accum + 1
     }, 0);
+
+    if (todos.length) {
+      toggleAllSection = (
+        <input
+          className="toggle-all"
+          type="checkbox"
+          onChange={this.toggleAll}
+          checked={activeTodoCount === 0}
+        />
+      );
+    }
 
     return (
       <ReactiveBase
@@ -134,12 +145,7 @@ class TodoApp extends Component {
         </header>
 
         <section className="main">
-          <input
-            className="toggle-all"
-            type="checkbox"
-            onChange={this.toggleAll}
-            checked={activeTodoCount === 0}
-          />
+          {toggleAllSection}
           <ul className="todo-list">
             <ReactiveList
               stream={true}
