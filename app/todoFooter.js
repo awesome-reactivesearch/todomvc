@@ -2,10 +2,7 @@
 
 import React, { Component } from "react";
 import classNames from "classnames";
-import {
-  ReactiveElement,
-  DataController
-} from "@appbaseio/reactivesearch";
+import { ReactiveElement, DataController } from "@appbaseio/reactivesearch";
 
 import TodoButton from "./todoButton";
 import Utils from "./utils";
@@ -15,36 +12,33 @@ const ACTIVE_TODOS = "active";
 const COMPLETED_TODOS = "completed";
 
 class TodoFooter extends Component {
-
-  onAllData (data) {
+  onAllData(data) {
     // merging all streaming and historic data
     var todosData = Utils.mergeTodos(data);
 
     let activeTodoCount = todosData.reduce((accum, todo) => {
-      return todo._source.completed ? accum : accum + 1
-    }, 0)
+      return todo._source.completed ? accum : accum + 1;
+    }, 0);
 
     let activeTodoWord = Utils.pluralize(activeTodoCount, "item");
 
-    return(
+    return (
       <span className="todo-count">
         <strong>{activeTodoCount}</strong> {activeTodoWord} left
       </span>
-    )
+    );
   }
 
-  render () {
+  render() {
     let clearButton = null;
     let { completedCount, onClearCompleted, nowShowing } = this.props;
 
     if (completedCount > 0) {
       clearButton = (
-        <button
-          className="clear-completed"
-          onClick={onClearCompleted}>
+        <button className="clear-completed" onClick={onClearCompleted}>
           Clear completed
         </button>
-      )
+      );
     }
 
     return (
@@ -53,13 +47,11 @@ class TodoFooter extends Component {
           componentId="ActiveCountSensor"
           visible={false}
           showFilter={false}
-          customQuery={
-            function(value) {
-              return {
-                match_all: {}
-              }
-            }
-          }
+          customQuery={function(value) {
+            return {
+              match_all: {}
+            };
+          }}
         />
         <ReactiveElement
           componentId="ActiveCount"
@@ -80,7 +72,7 @@ class TodoFooter extends Component {
             />
             <TodoButton
               label="Active"
-              value="active" 
+              value="active"
               active={this.props.nowShowing === ACTIVE_TODOS}
               onClick={this.props.handleToggle}
             />
@@ -94,7 +86,7 @@ class TodoFooter extends Component {
         </ul>
         {clearButton}
       </footer>
-    )
+    );
   }
 }
 

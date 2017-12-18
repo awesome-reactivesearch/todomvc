@@ -11,73 +11,74 @@ class TodoList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nowShowing: ALL_TODOS,
+      nowShowing: ALL_TODOS
     };
     this.handleToggle = this.handleToggle.bind(this);
     this.clearCompleted = this.clearCompleted.bind(this);
   }
 
-  handleToggle (e) {
+  handleToggle(e) {
     this.setState({
       nowShowing: e
     });
   }
 
-  toggle (todoToToggle) {
+  toggle(todoToToggle) {
     this.props.model.toggle(todoToToggle);
   }
 
-  destroy (todo) {
+  destroy(todo) {
     this.props.model.destroy(todo);
   }
 
-  save (todoToSave, text) {
+  save(todoToSave, text) {
     this.props.model.save(todoToSave, text);
   }
 
-  clearCompleted () {
+  clearCompleted() {
     this.props.model.clearCompleted();
   }
 
   render() {
     let footer,
-    todos = this.props.model.todos;
+      todos = this.props.model.todos;
 
     let activeTodoCount = todos.reduce((accum, todo) => {
-      return todo.completed ? accum : accum + 1
+      return todo.completed ? accum : accum + 1;
     }, 0);
 
     let completedCount = todos.length - activeTodoCount;
 
     if (activeTodoCount || completedCount) {
-      footer =
-      <TodoFooter
-        count={activeTodoCount}
-        completedCount={completedCount}
-        nowShowing={this.state.nowShowing}
-        onClearCompleted={this.clearCompleted}
-        handleToggle={this.handleToggle}
-      />
+      footer = (
+        <TodoFooter
+          count={activeTodoCount}
+          completedCount={completedCount}
+          nowShowing={this.state.nowShowing}
+          onClearCompleted={this.clearCompleted}
+          handleToggle={this.handleToggle}
+        />
+      );
     }
 
     if (this.state.nowShowing !== ALL_TODOS) {
-      todos = todos.filter((todo) => todo.completed === (this.state.nowShowing === COMPLETED_TODOS));
+      todos = todos.filter(
+        todo => todo.completed === (this.state.nowShowing === COMPLETED_TODOS)
+      );
     }
     return (
       <div>
-        {
-          todos.map((todo) => {
-            return (
-              <TodoItem
-                key={todo.id}
-                todo={{...todo}}
-                onToggle={this.toggle.bind(this, todo)}
-                onDestroy={this.destroy.bind(this, todo)}
-                onSave={this.save.bind(this, todo)}
-              />
-            );
-          })
-        }
+        {todos.map(todo => {
+          return (
+            <TodoItem
+              key={todo.id}
+              todo={{ ...todo }}
+              onToggle={this.toggle.bind(this, todo)}
+              onDestroy={this.destroy.bind(this, todo)}
+              onSave={this.save.bind(this, todo)}
+            />
+          );
+        })}
         {footer}
       </div>
     );

@@ -22,35 +22,35 @@ const COMPLETED_TODOS = "completed";
 let routerInstance;
 
 class TodoApp extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       nowShowing: ALL_TODOS,
       editing: null,
       newTodo: ""
-    }
+    };
     this.onAllData = this.onAllData.bind(this);
     this.toggleAll = this.toggleAll.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleNewTodoKeyDown = this.handleNewTodoKeyDown.bind(this);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     let { setState } = this;
     routerInstance = Router({
-      "/": setState.bind(this, {nowShowing: ALL_TODOS}),
-      "/all": setState.bind(this, {nowShowing: ALL_TODOS}),
-      "/active": setState.bind(this, {nowShowing: ACTIVE_TODOS}),
-      "/completed": setState.bind(this, {nowShowing: COMPLETED_TODOS})
+      "/": setState.bind(this, { nowShowing: ALL_TODOS }),
+      "/all": setState.bind(this, { nowShowing: ALL_TODOS }),
+      "/active": setState.bind(this, { nowShowing: ACTIVE_TODOS }),
+      "/completed": setState.bind(this, { nowShowing: COMPLETED_TODOS })
     });
     routerInstance.init("/");
   }
 
-  handleChange (newTodo) {
+  handleChange(newTodo) {
     this.setState({ newTodo });
   }
 
-  handleNewTodoKeyDown (event) {
+  handleNewTodoKeyDown(event) {
     if (event.keyCode !== ENTER_KEY) {
       return;
     }
@@ -62,7 +62,7 @@ class TodoApp extends Component {
     }
   }
 
-  toggleAll (event) {
+  toggleAll(event) {
     let checked = event.target.checked;
     this.props.model.toggleAll(checked);
   }
@@ -76,7 +76,6 @@ class TodoApp extends Component {
   }
 
   onAllData(data) {
-
     // merging all streaming and historic data
     let todosData = Utils.mergeTodos(data);
 
@@ -85,21 +84,17 @@ class TodoApp extends Component {
       return a._source.createdAt - b._source.createdAt;
     });
 
-    return (
-      <TodoList
-        todos={todosData}
-        model={this.props.model}
-      />
-    )
+    return <TodoList todos={todosData} model={this.props.model} />;
   }
 
-  render () {
-    let todos = this.props.model.todos, toggleAllSection;
+  render() {
+    let todos = this.props.model.todos,
+      toggleAllSection;
 
     let { nowShowing, newTodo } = this.state;
 
     let activeTodoCount = todos.reduce((accum, todo) => {
-      return todo.completed ? accum : accum + 1
+      return todo.completed ? accum : accum + 1;
     }, 0);
 
     if (todos.length) {
@@ -117,18 +112,17 @@ class TodoApp extends Component {
       <ReactiveBase
         app="todomvc"
         credentials="kDoV3s5Xk:4994cac6-00a3-4179-b159-b0adbfdde34b"
-        type="todo_reactjs">
+        type="todo_reactjs"
+      >
         <DataController
           componentId="AllTodosSensor"
           visible={false}
           showFilter={false}
-          customQuery={
-            function(value) {
-              return {
-                match_all: {}
-              }
-            }
-          }
+          customQuery={function(value) {
+            return {
+              match_all: {}
+            };
+          }}
         />
         <header className="header">
           <h1>todos</h1>
@@ -160,7 +154,7 @@ class TodoApp extends Component {
           </ul>
         </section>
       </ReactiveBase>
-    )
+    );
   }
 }
 

@@ -5,7 +5,7 @@
  * Doing so, others can have the same advantage and
  * learn as quick as you learned too.
  * Thanks in advance!!!
-***************************************************/
+ ***************************************************/
 
 // Based on: http://todomvc.com/examples/react/#/
 
@@ -19,9 +19,9 @@ let model = new TodoModel("react-todos");
 
 let render = () => {
   ReactDOM.render(
-    <TodoApp model={model}/>,
+    <TodoApp model={model} />,
     document.getElementsByClassName("todoapp")[0]
-  )
+  );
 };
 
 model.subscribe(render);

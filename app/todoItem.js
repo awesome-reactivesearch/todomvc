@@ -10,71 +10,70 @@ const ESCAPE_KEY = 27;
 const ENTER_KEY = 13;
 
 class TodoItem extends Component {
-
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       editText: "",
       editing: false,
       autoFocus: false
-    }
+    };
   }
 
-  handleBlur (event) {
+  handleBlur(event) {
     this.setState({
       editText: this.props.todo.title,
       editing: false
     });
   }
 
-  handleSubmit (event) {
+  handleSubmit(event) {
     let val = this.state.editText.trim();
     if (val) {
       this.props.onSave(val);
       this.setState({
         editText: val,
         editing: false
-      })
+      });
     } else {
-      this.props.onDestroy()
+      this.props.onDestroy();
     }
   }
 
-  handleEdit () {
+  handleEdit() {
     this.setState({
       editText: this.props.todo.title,
       editing: true
-    })
+    });
   }
 
-  handleKeyDown (event) {
+  handleKeyDown(event) {
     if (event.which === ESCAPE_KEY) {
       this.setState({
         editText: this.props.todo.title,
         editing: false
-      })
+      });
     } else if (event.which === ENTER_KEY) {
-      this.handleSubmit(event)
+      this.handleSubmit(event);
     }
   }
 
-  handleChange (value) {
+  handleChange(value) {
     if (this.state.editing) {
-      this.setState({ editText: value })
+      this.setState({ editText: value });
     }
   }
 
-  getInitialState () {
-    return {editText: this.props.todo.title}
+  getInitialState() {
+    return { editText: this.props.todo.title };
   }
 
   /**
-  * Safely manipulate the DOM after updating the state when invoking
-  * `this.props.onEdit()` in the `handleEdit` method above.
-  * For more info refer to notes at https://facebook.github.io/react/docs/component-api.html#setstate
-  * and https://facebook.github.io/react/docs/component-specs.html#updating-componentdidupdate
-  */
-  componentDidUpdate (prevProps, prevState) {
+   * Safely manipulate the DOM after updating the state when invoking
+   * `this.props.onEdit()` in the `handleEdit` method above.
+   * For more info refer to notes at https://facebook.github.io/react/docs/component-api.html#setstate
+   * and https://facebook.github.io/react/docs/component-specs.html#updating-componentdidupdate
+   */
+  componentDidUpdate(prevProps, prevState) {
     if (!prevState.editing && this.state.editing) {
       this.setState({ autoFocus: true });
 
@@ -82,16 +81,17 @@ class TodoItem extends Component {
       let node = ReactDOM.findDOMNode(this.refs.editField);
       node = node.childNodes[0].children[0];
       node.focus();
-      node.setSelectionRange(node.value.length, node.value.length)
+      node.setSelectionRange(node.value.length, node.value.length);
     }
   }
 
-  render () {
+  render() {
     return (
-      <li className={classNames({
-        completed: this.props.todo.completed,
-        editing: this.state.editing
-      })}
+      <li
+        className={classNames({
+          completed: this.props.todo.completed,
+          editing: this.state.editing
+        })}
       >
         <div className="view">
           <input
@@ -117,7 +117,7 @@ class TodoItem extends Component {
           onValueChange={this.handleChange.bind(this)}
         />
       </li>
-    )
+    );
   }
 }
 
