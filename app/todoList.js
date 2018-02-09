@@ -41,7 +41,7 @@ class TodoList extends Component {
 
   render() {
     let footer,
-      todos = this.props.model.todos;
+      todos = this.props.todos;
 
     let activeTodoCount = todos.reduce((accum, todo) => {
       return todo.completed ? accum : accum + 1;

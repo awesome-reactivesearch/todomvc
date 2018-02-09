@@ -4,7 +4,7 @@ import Appbase from "appbase-js";
 
 import Utils from "./utils";
 
-const ES_TYPE = "todo_reactjs";
+const ES_TYPE = "todos-native";
 
 class TodoModel {
   constructor(key) {
@@ -13,8 +13,8 @@ class TodoModel {
     this.onChanges = [];
     this.appbaseRef = new Appbase({
       url: "https://scalr.api.appbase.io",
-      app: "todomvc",
-      credentials: "kQSlRKaSv:a081eec0-b85f-4953-a3d0-c18f94b26de4"
+      app: "todos-native",
+      credentials: "ylk5rT3SA:c2f74c2c-7812-4f1b-af13-2679d0a3cf79"
     });
 
     this.appbaseRef
@@ -49,7 +49,7 @@ class TodoModel {
         let { _deleted, _source } = stream;
 
         if (_deleted) {
-          this.todos = this.todos.filter(function(candidate) {
+          this.todos = this.todos.filter(function (candidate) {
             return candidate.id !== _source.id;
           });
         } else if (_source) {
@@ -79,9 +79,9 @@ class TodoModel {
   }
 
   addTodo(title) {
-    const id = Utils.uuid();
+    // const id = Utils.uuid();
     const jsonObject = {
-      id,
+      // id,
       title,
       completed: false,
       createdAt: Date.now()
@@ -98,10 +98,10 @@ class TodoModel {
         id: id,
         body: jsonObject
       })
-      .on("data", function(response) {
+      .on("data", function (response) {
         console.log(response);
       })
-      .on("error", function(error) {
+      .on("error", function (error) {
         console.log(error);
       });
   }
@@ -133,9 +133,9 @@ class TodoModel {
       return todo !== todoToToggle
         ? todo
         : {
-            ...todo,
-            completed: !todo.completed
-          };
+          ...todo,
+          completed: !todo.completed
+        };
     });
     this.inform();
 
@@ -149,10 +149,10 @@ class TodoModel {
           completed: !todoToToggle.completed
         }
       })
-      .on("data", function(response) {
+      .on("data", function (response) {
         console.log(response);
       })
-      .on("error", function(error) {
+      .on("error", function (error) {
         console.log(error);
       });
   }
@@ -170,10 +170,10 @@ class TodoModel {
         type: ES_TYPE,
         id: todo.id
       })
-      .on("data", function(response) {
+      .on("data", function (response) {
         console.log(response);
       })
-      .on("error", function(error) {
+      .on("error", function (error) {
         console.log(error);
       });
   }
@@ -184,9 +184,9 @@ class TodoModel {
       return todo !== todoToSave
         ? todo
         : {
-            ...todo,
-            title: text
-          };
+          ...todo,
+          title: text
+        };
     });
     this.inform();
 
@@ -200,10 +200,10 @@ class TodoModel {
           title: text
         }
       })
-      .on("data", function(response) {
+      .on("data", function (response) {
         console.log(response);
       })
-      .on("error", function(error) {
+      .on("error", function (error) {
         console.log(error);
       });
   }

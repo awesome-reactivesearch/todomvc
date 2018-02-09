@@ -80,10 +80,12 @@ class TodoApp extends Component {
     let todosData = Utils.mergeTodos(data);
 
     // sorting todos based on creation time
-    todosData = todosData.sort(function(a, b) {
+    todosData = todosData.sort(function (a, b) {
       return a._source.createdAt - b._source.createdAt;
-    });
+    })
+      .map(todo => todo._source);
 
+    console.log('todosData: ', todosData);
     return <TodoList todos={todosData} model={this.props.model} />;
   }
 
@@ -110,15 +112,15 @@ class TodoApp extends Component {
 
     return (
       <ReactiveBase
-        app="todomvc"
-        credentials="kDoV3s5Xk:4994cac6-00a3-4179-b159-b0adbfdde34b"
-        type="todo_reactjs"
+        app="todos-native"
+        credentials="ylk5rT3SA:c2f74c2c-7812-4f1b-af13-2679d0a3cf79"
+        type="todos-native"
       >
         <DataController
           componentId="AllTodosSensor"
           visible={false}
           showFilter={false}
-          customQuery={function(value) {
+          customQuery={function (value) {
             return {
               match_all: {}
             };
