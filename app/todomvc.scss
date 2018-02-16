@@ -258,6 +258,7 @@ body {
 }
 
 .toggle-all {
+  left: -6px;
   text-align: center;
   border: none; /* Mobile Safari */
   position: absolute;
@@ -521,38 +522,49 @@ html .clear-completed:active {
 
 // style.scss
 .new-todo-container {
-  .rbc-input {
+  .new-todo {
     @extend .new-todo;
+    height: 4rem;
   }
 }
 
 .edit-todo-container {
-  .rbc-input {
+  .edit-todo {
     @extend .edit;
+     height: 3.7rem;
   }
 }
 
-.rbc-resultlist-container {
-  .rbc-resultlist-scroll-container {
-    .rbc-resultlist-item__details {
-      width: 100%;
+// .rbc-resultlist-container {
+//   .rbc-resultlist-scroll-container {
+//     .rbc-resultlist-item__details {
+//       width: 100%;
 
-      label {
-        margin-left: 0.3rem;
-      }
-    }
-  }
-}
+//       label {
+//         margin-left: 0.3rem;
+//       }
+//     }
+//   }
+// }
 
 .footer {
+  height: 3.1rem;
   .rbc-btn {
-    // display: inline;
+    display: inline;
     @extend .filters;
     position: relative;
     text-transform: capitalize;
   }
+  .clear-completed {
+    padding-top: 0.2rem;
+  }
+  .todo-count {
+    padding-top: 0.2rem;
+  }
 }
 
-.rbc-poweredby {
-  display: none;
+.reactivelist {
+  .poweredBy {
+    display: none !important;
+  }
 }

@@ -2,7 +2,7 @@
 
 import React, { Component } from "react";
 import classNames from "classnames";
-import { ReactiveElement, DataController } from "@appbaseio/reactivesearch";
+import { DataController, ReactiveList } from "@appbaseio/reactivesearch";
 
 import TodoButton from "./todoButton";
 import Utils from "./utils";
@@ -11,13 +11,16 @@ const ALL_TODOS = "all";
 const ACTIVE_TODOS = "active";
 const COMPLETED_TODOS = "completed";
 
+import "./todomvc.scss";
+
 class TodoFooter extends Component {
-  onAllData(data) {
-    // merging all streaming and historic data
-    var todosData = Utils.mergeTodos(data);
+  onAllData(todos, streamData) {
+    // console.log('@onAllData - todos: ', todos);
+    // console.log('@onAllData - streamData: ', streamData);
+    const todosData = Utils.mergeTodos(todos, streamData);
 
     let activeTodoCount = todosData.reduce((accum, todo) => {
-      return todo._source.completed ? accum : accum + 1;
+      return todo.completed ? accum : accum + 1;
     }, 0);
 
     let activeTodoWord = Utils.pluralize(activeTodoCount, "item");
@@ -47,13 +50,14 @@ class TodoFooter extends Component {
           componentId="ActiveCountSensor"
           visible={false}
           showFilter={false}
-          customQuery={function(value) {
+          customQuery={function (value) {
             return {
               match_all: {}
             };
           }}
         />
-        <ReactiveElement
+        <ReactiveList
+          dataField="title"
           componentId="ActiveCount"
           stream={true}
           showResultStats={false}
@@ -61,6 +65,10 @@ class TodoFooter extends Component {
           react={{
             or: ["ActiveCountSensor"]
           }}
+          innerClass={{
+            poweredBy: 'poweredBy'
+          }}
+          className="reactivelist"
         />
         <ul className="filters">
           <div className="rbc-buttongroup">

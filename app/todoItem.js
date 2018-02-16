@@ -9,6 +9,8 @@ import { TextField } from "@appbaseio/reactivesearch";
 const ESCAPE_KEY = 27;
 const ENTER_KEY = 13;
 
+import "./todomvc.scss";
+
 class TodoItem extends Component {
   constructor(props) {
     super(props);
@@ -67,21 +69,15 @@ class TodoItem extends Component {
     return { editText: this.props.todo.title };
   }
 
-  /**
-   * Safely manipulate the DOM after updating the state when invoking
-   * `this.props.onEdit()` in the `handleEdit` method above.
-   * For more info refer to notes at https://facebook.github.io/react/docs/component-api.html#setstate
-   * and https://facebook.github.io/react/docs/component-specs.html#updating-componentdidupdate
-   */
   componentDidUpdate(prevProps, prevState) {
     if (!prevState.editing && this.state.editing) {
       this.setState({ autoFocus: true });
 
       // workaround because after setState re-rendering is not happening
-      let node = ReactDOM.findDOMNode(this.refs.editField);
-      node = node.childNodes[0].children[0];
-      node.focus();
-      node.setSelectionRange(node.value.length, node.value.length);
+      // let node = ReactDOM.findDOMNode(this.refs.editField);
+      // node = node.childNodes[0].children[0];
+      // node.focus();
+      // node.setSelectionRange(node.value.length, node.value.length);
     }
   }
 
@@ -109,7 +105,10 @@ class TodoItem extends Component {
           ref="editField"
           autoFocus={this.state.autoFocus}
           componentId="EditSensor"
-          dataField="name"
+          dataField="title"
+          innerClass={{
+            input: 'edit-todo'
+          }}
           className="edit-todo-container"
           defaultSelected={this.state.editText}
           onBlur={this.handleBlur.bind(this)}

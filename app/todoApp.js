@@ -10,6 +10,7 @@ import {
 
 import Utils from "./utils";
 import TodoList from "./todoList";
+import CONFIG from '../constants/Config';
 
 import "./todomvc.scss";
 
@@ -27,7 +28,8 @@ class TodoApp extends Component {
     this.state = {
       nowShowing: ALL_TODOS,
       editing: null,
-      newTodo: ""
+      newTodo: "",
+      todos: [],
     };
     this.onAllData = this.onAllData.bind(this);
     this.toggleAll = this.toggleAll.bind(this);
@@ -67,7 +69,7 @@ class TodoApp extends Component {
     this.props.model.toggleAll(checked);
   }
 
-  customQuery(value) {
+  customQuery() {
     return {
       query: {
         match_all: {}
@@ -75,23 +77,18 @@ class TodoApp extends Component {
     };
   }
 
-  onAllData(data) {
-    // merging all streaming and historic data
-    let todosData = Utils.mergeTodos(data);
+  onAllData(todos, streamData) {
+    const todosData = Utils.mergeTodos(todos, streamData);
 
-    // sorting todos based on creation time
-    todosData = todosData.sort(function (a, b) {
-      return a._source.createdAt - b._source.createdAt;
-    })
-      .map(todo => todo._source);
+    // this.setState({ todos: todosData });
 
-    console.log('todosData: ', todosData);
     return <TodoList todos={todosData} model={this.props.model} />;
   }
 
   render() {
-    let todos = this.props.model.todos,
-      toggleAllSection;
+    let toggleAllSection;
+
+    let { todos } = this.props.model;
 
     let { nowShowing, newTodo } = this.state;
 
@@ -112,25 +109,24 @@ class TodoApp extends Component {
 
     return (
       <ReactiveBase
-        app="todos-native"
-        credentials="ylk5rT3SA:c2f74c2c-7812-4f1b-af13-2679d0a3cf79"
-        type="todos-native"
+        app={CONFIG.app}
+        credentials={CONFIG.credentials}
+        type={CONFIG.type}
       >
         <DataController
           componentId="AllTodosSensor"
           visible={false}
           showFilter={false}
-          customQuery={function (value) {
-            return {
-              match_all: {}
-            };
-          }}
+          customQuery={this.customQuery}
         />
         <header className="header">
-          <h1>todos</h1>
+          <h1 className="test">todos</h1>
           <TextField
             componentId="NewTodoSensor"
             dataField="title"
+            innerClass={{
+              input: 'new-todo'
+            }}
             className="new-todo-container"
             placeholder="What needs to be done?"
             onKeyDown={this.handleNewTodoKeyDown}
@@ -144,6 +140,8 @@ class TodoApp extends Component {
           {toggleAllSection}
           <ul className="todo-list">
             <ReactiveList
+              componentId="TodosList"
+              dataField="title"
               stream={true}
               react={{
                 or: ["AllTodosSensor"]
@@ -152,6 +150,10 @@ class TodoApp extends Component {
               showResultStats={false}
               pagination={false}
               onAllData={this.onAllData}
+              innerClass={{
+                poweredBy: 'poweredBy'
+              }}
+              className="reactivelist"
             />
           </ul>
         </section>

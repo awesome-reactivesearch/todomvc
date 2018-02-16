@@ -1,13 +1,14 @@
 @import "./todomvc";
 
-.new-todo-container {
-  .rbc-input {
+.new-todo-container{
+  .new-todo-input {
     @extend .new-todo;
+    height: 4rem;
   }
 }
 
-.edit-todo-container {
-  .rbc-input {
+.edit-todo-container{
+  .edit-todo-input {
     @extend .edit;
   }
 }

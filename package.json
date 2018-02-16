@@ -22,8 +22,8 @@
     "url": "https://github.com/dhruvdutt"
   },
   "devDependencies": {
-    "@appbaseio/reactivesearch": "^1.4.0",
-    "appbase-js": "^2.1.0",
+    "@appbaseio/reactivesearch": "^2.2.1",
+    "appbase-js": "^2.2.10",
     "babel-core": "^6.24.0",
     "babel-loader": "^6.4.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",

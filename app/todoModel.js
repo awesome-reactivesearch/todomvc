@@ -1,10 +1,7 @@
-// Based on: https://github.com/tastejs/todomvc/blob/gh-pages/examples/react/js/todoModel.js
+import Appbase from 'appbase-js'; // installed alongside reactivesearch-native
 
-import Appbase from "appbase-js";
-
-import Utils from "./utils";
-
-const ES_TYPE = "todos-native";
+import CONFIG from '../constants/Config';
+import Utils from './utils'
 
 class TodoModel {
   constructor(key) {
@@ -12,14 +9,14 @@ class TodoModel {
     this.todos = [];
     this.onChanges = [];
     this.appbaseRef = new Appbase({
-      url: "https://scalr.api.appbase.io",
-      app: "todos-native",
-      credentials: "ylk5rT3SA:c2f74c2c-7812-4f1b-af13-2679d0a3cf79"
+      url: CONFIG.url,
+      app: CONFIG.app,
+      credentials: CONFIG.credentials,
     });
 
     this.appbaseRef
       .search({
-        type: ES_TYPE,
+        type: CONFIG.type,
         size: 1000,
         body: {
           query: {
@@ -38,7 +35,7 @@ class TodoModel {
 
     this.appbaseRef
       .searchStream({
-        type: ES_TYPE,
+        type: CONFIG.type,
         body: {
           query: {
             match_all: {}
@@ -79,9 +76,9 @@ class TodoModel {
   }
 
   addTodo(title) {
-    // const id = Utils.uuid();
+    const id = Utils.uuid();
     const jsonObject = {
-      // id,
+      id,
       title,
       completed: false,
       createdAt: Date.now()
@@ -94,7 +91,7 @@ class TodoModel {
     // broadcast all changes
     this.appbaseRef
       .index({
-        type: ES_TYPE,
+        type: CONFIG.type,
         id: id,
         body: jsonObject
       })
@@ -119,10 +116,16 @@ class TodoModel {
 
     // broadcast all changes
     this.todos.forEach(todo => {
-      this.appbaseRef.index({
-        type: ES_TYPE,
-        id: todo.id,
-        body: todo
+      console.log('todo: ', todo);
+      const { id, ...todoData } = todo;
+      this.appbaseRef.update({
+        type: CONFIG.type,
+        id: id,
+        body: {
+          doc: {
+            ...todoData
+          }
+        }
       });
     });
   }
@@ -139,14 +142,18 @@ class TodoModel {
     });
     this.inform();
 
+    const { id, ...todoData } = todoToToggle;
+
     // broadcast all changes
     this.appbaseRef
-      .index({
-        type: ES_TYPE,
-        id: todoToToggle.id,
+      .update({
+        type: CONFIG.type,
+        id: id,
         body: {
-          ...todoToToggle,
-          completed: !todoToToggle.completed
+          doc: {
+            ...todoData,
+            completed: !todoData.completed
+          }
         }
       })
       .on("data", function (response) {
@@ -167,7 +174,7 @@ class TodoModel {
     // broadcast all changes
     this.appbaseRef
       .delete({
-        type: ES_TYPE,
+        type: CONFIG.type,
         id: todo.id
       })
       .on("data", function (response) {
@@ -190,14 +197,18 @@ class TodoModel {
     });
     this.inform();
 
+    const { id, ...todoData } = todoToSave;
+
     // broadcast all changes
     this.appbaseRef
-      .index({
-        type: ES_TYPE,
-        id: todoToSave.id,
+      .update({
+        type: CONFIG.type,
+        id: id,
         body: {
-          ...todoToSave,
-          title: text
+          doc: {
+            ...todoData,
+            title: text
+          }
         }
       })
       .on("data", function (response) {
@@ -218,7 +229,7 @@ class TodoModel {
     // broadcast all changes
     completed.forEach(todo => {
       this.appbaseRef.delete({
-        type: ES_TYPE,
+        type: CONFIG.type,
         id: todo.id
       });
     });

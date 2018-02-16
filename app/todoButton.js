@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import classNames from "classnames";
 
+import "./todomvc.scss";
+
 class TodoButton extends Component {
   handleClick() {
     this.props.onClick(this.props.value);

@@ -1,6 +1,5 @@
-// Based on https://github.com/tastejs/todomvc/blob/gh-pages/examples/react/js/utils.js
-
 class Utils {
+
   static uuid() {
     let i,
       random,
@@ -16,52 +15,50 @@ class Utils {
     return id;
   }
 
+  // [source] https://gist.github.com/lmfresneda/9158e06a93a819a78b30cc175573a8d3
+  static removeDuplicates(arr, prop) {
+    const obj = {};
+    for (let i = 0, len = arr.length; i < len; i++) {
+      if (!obj[arr[i][prop]]) obj[arr[i][prop]] = arr[i];
+    }
+    const newArr = [];
+    for (const key in obj) newArr.push(obj[key]); // eslint-disable-line
+    return newArr;
+  };
+
   static pluralize(count, word) {
     return count === 1 ? word : word + "s";
   }
 
-  static store(namespace, data) {
-    if (data) {
-      return localStorage.setItem(namespace, JSON.stringify(data));
-    }
-
-    let datastored = localStorage.getItem(namespace);
-    return (datastored && JSON.parse(datastored)) || [];
-  }
-
-  static mergeTodos({ mode, newData, currentData }) {
-    let todosData = [];
-
-    // streaming data
-    if (mode === "streaming") {
-      // todo is deleted
-      if (newData && newData._deleted) {
-        todosData = currentData.filter(data => data._id !== newData._id);
-      } else {
-        let _updated = false;
-        todosData = currentData.map(data => {
-          // todo is updated
-          if (data._id === newData._id) {
-            _updated = true;
-            return newData;
-          } else {
-            return data;
+  static mergeTodos(todos, streamData) {
+    // note: don't judge for the logic
+    let todosData = todos;
+    if (todosData.length > 0 || streamData.length > 0) {
+      todosData = todosData.map((todo) => {
+        let todoToReturn = todo;
+        for (let i = 0; i < streamData.length; i++) {
+          // variable to track untouched todos after checking with all todosData iems
+          streamData[i].touched = false; // eslint-disable-line
+          // [case]: todo data is updated
+          if (todo._id === streamData[i]._id) {
+            todoToReturn = streamData[i];
+            streamData[i].touched = true; // eslint-disable-line
           }
-        });
-        // todo is added
-        if (!_updated) {
-          todosData = currentData;
-          todosData.push(newData);
         }
-      }
-    } else {
-      // non-streaming data
-      if (Array.isArray(newData) && newData.length > 0) {
-        todosData = newData;
-      } else if (Array.isArray(currentData) && currentData.length > 0) {
-        todosData = currentData;
-      }
+        return todoToReturn;
+      });
+      // [case]: new todo is added
+      // collect untouched todos || the newly added streamed todos
+      const newTodos = streamData.filter(todo => !todo.touched);
+      // merge the new streaming data with updated streaming data
+      if (newTodos.length > 0) todosData = todosData.concat(newTodos);
+      // clean unpredictable duplicates
+      todosData = this.removeDuplicates(todosData, '_id');
+      // clean deleted todos
+      todosData = todosData.filter(todo => !todo._deleted);
     }
+    // sorting todos based on creation time
+    todosData = todosData.sort((a, b) => a.createdAt - b.createdAt);
 
     return todosData;
   }
