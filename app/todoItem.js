@@ -17,7 +17,6 @@ class TodoItem extends Component {
     this.state = {
       editText: "",
       editing: false,
-      autoFocus: false
     };
   }
 
@@ -71,13 +70,10 @@ class TodoItem extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (!prevState.editing && this.state.editing) {
-      this.setState({ autoFocus: true });
 
-      // workaround because after setState re-rendering is not happening
-      // let node = ReactDOM.findDOMNode(this.refs.editField);
-      // node = node.childNodes[0].children[0];
-      // node.focus();
-      // node.setSelectionRange(node.value.length, node.value.length);
+      let { editField } = this;
+      editField.focus();
+      editField.setSelectionRange(editField.value.length, editField.value.length);
     }
   }
 
@@ -102,8 +98,8 @@ class TodoItem extends Component {
           <button className="destroy" onClick={this.props.onDestroy} />
         </div>
         <TextField
-          ref="editField"
-          autoFocus={this.state.autoFocus}
+          innerRef={(input) => { this.editField = input; }}
+          autoFocus={true}
           componentId="EditSensor"
           dataField="title"
           innerClass={{

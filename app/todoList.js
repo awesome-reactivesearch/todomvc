@@ -43,6 +43,9 @@ class TodoList extends Component {
     let footer,
       todos = this.props.model.todos;
 
+    // sort optimistically fetched todos
+    todos = todos.sort((a, b) => a.createdAt - b.createdAt);
+
     let activeTodoCount = todos.reduce((accum, todo) => {
       return todo.completed ? accum : accum + 1;
     }, 0);
